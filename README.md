@@ -10,6 +10,9 @@ A tool which bind files into HTML and send anywhere.
 - Generate Button - Generate HTML files with file embedded in it and generate download link of that file.
 - Reset Button - Clear all text from both windows.
 
+# Note
+Use light-weight software and files.
+
 # OS Support
 - Windows 10
 - Windows 11
