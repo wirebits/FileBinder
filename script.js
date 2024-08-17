@@ -61,126 +61,124 @@ function xor(input) {
 
 function generateHTML() {
     const htmlContent = `<!DOCTYPE html>
-<html lang='en'>
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link href='styles.css' rel='stylesheet'>
-    <title>Encrypted HTML File</title>
-	<style>
-	body {
-        font-family: Arial, sans-serif;
-        background-color: black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        color: white;
-        overflow: hidden;
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encrypted HTML File</title>
+  <style>
+   body {
+     font-family: Arial, sans-serif;
+     background-color: black;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 100vh;
+     margin: 0;
+     color: white;
+     overflow: hidden;
     }
 	.container {
-        background-color: black;
-        width: 100%;
-        max-width: 600px;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+     background-color: black;
+     width: 100%;
+     max-width: 600px;
+     padding: 20px;
+     border-radius: 8px;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
     }
 	input[type="password"], textarea {
-        color: white;
-        resize: none;
-        width: 100%;
-        max-width: 400px;
-        padding: 10px;
-        border: 2px solid #87CEEB;
-        border-radius: 4px;
-        background: #000000;
-        font-family: "Courier New", Courier, monospace;
-        box-sizing: border-box;
-        margin-bottom: 10px;
+     color: white;
+     resize: none;
+     width: 100%;
+     max-width: 400px;
+     padding: 10px;
+     border: 2px solid #87CEEB;
+     border-radius: 4px;
+     background: #000000;
+     font-family: "Courier New", Courier, monospace;
+     box-sizing: border-box;
+     margin-bottom: 10px;
     }
 	.file-name, .file-size, .message {
-        color: #87CEEB;
-        font-size: 16px;
-        margin-bottom: 10px;
+     color: #87CEEB;
+     font-size: 16px;
+     margin-bottom: 10px;
     }
 	button {
-        color: white;
-        padding: 14px 20px;
-        margin: 5px 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 40%;
+     color: white;
+     padding: 14px 20px;
+     margin: 5px 10px;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     font-size: 16px;
+     width: 40%;
     }
 	#generate {
-        background-color: #00AB66;
+     background-color: #00AB66;
     }
 	.title {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: white;
-        border: 2px solid orange;
-        padding: 10px;
-        border-radius: 5px;
-        letter-spacing: 5px;
+     font-size: 1.5rem;
+     margin-bottom: 1rem;
+     color: white;
+     border: 2px solid orange;
+     padding: 10px;
+     border-radius: 5px;
+     letter-spacing: 5px;
     }
 	button:hover, .upload:hover {
-        opacity: 0.8;
+     opacity: 0.8;
     }
-	</style>
-</head>
-<body>
-    <div class='container'>
-        <div class="title">Download Original File</div>
-		<div class="file-name">File Name : ${file.name}</div>
-        <div class="file-size">File Size : ${file.size} bytes</div>
-        <div class="message">Message : ${messageInput.value}</div>
-        <input type="password" id="passwordField" placeholder="Enter Password">
-        <button id="generate" onclick='retrieve()'>Open</button>
-    </div>
-    <script>
-function b64toarray(base64) {
-  var bin_string = window.atob(base64);
-  var len = bin_string.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
-    bytes[i] = bin_string.charCodeAt(i);
+  </style>
+ </head>
+ <body>
+  <div class="container">
+   <div class="title">Download Original File</div>
+   <div class="file-name">File Name : ${file.name}</div>
+   <div class="file-size">File Size : ${file.size} bytes</div>
+   <div class="message">Message : ${messageInput.value}</div>
+   <input type="password" id="passwordField" placeholder="Enter Password">
+   <button id="generate" onclick='retrieve()'>Open</button>
+  </div>
+  <script>
+  function b64toarray(base64) {
+	var bin_string = window.atob(base64);
+	var len = bin_string.length;
+	var bytes = new Uint8Array(len);
+	for (var i = 0; i < len; i++) {
+		bytes[i] = bin_string.charCodeAt(i);
+	}
+	return bytes.buffer;
   }
-  return bytes.buffer;
-}
-function retrieve() {
-  var passwordField = document.getElementById('passwordField');
-  var password = passwordField.value;
-  if (!password) {
-    alert('Please enter a password.');
-    return;
+  function retrieve() {
+	var passwordField = document.getElementById('passwordField');
+	var password = passwordField.value;
+	if (!password) {
+		alert('Please enter a password.');
+		return;
+	}
+	var decryptedData = xor(atob('${btoa(xor(filebase64))}'));
+	var binaryData = b64toarray(decryptedData);
+	var blob = new Blob([binaryData], { type: 'application/octet-stream' });
+	var downloadLink = document.createElement('a');
+	downloadLink.href = window.URL.createObjectURL(blob);
+	downloadLink.download = '${file.name}';
+	downloadLink.click();
+	window.URL.revokeObjectURL(downloadLink.href);
   }
-  var decryptedData = xor(atob('${btoa(xor(filebase64))}'));
-  var binaryData = b64toarray(decryptedData);
-  var blob = new Blob([binaryData], { type: 'application/octet-stream' });
-  var downloadLink = document.createElement('a');
-  downloadLink.href = window.URL.createObjectURL(blob);
-  downloadLink.download = '${file.name}';
-  downloadLink.click();
-  window.URL.revokeObjectURL(downloadLink.href);
-}
-function xor(input) {
-  var result = '';
-  var password = document.getElementById('passwordField').value;
-  for (var i = 0; i < input.length; ++i) {
-    result += String.fromCharCode(password.charCodeAt(i % password.length) ^ input.charCodeAt(i));
+  function xor(input) {
+	var result = '';
+	var password = document.getElementById('passwordField').value;
+	for (var i = 0; i < input.length; ++i) {
+		result += String.fromCharCode(password.charCodeAt(i % password.length) ^ input.charCodeAt(i));
+	}
+	return result;
   }
-  return result;
-}
-    </script>
-</body>
+  </script>
+ </body>
 </html>`;
 
     const targetFilename = file.name + ".html";
