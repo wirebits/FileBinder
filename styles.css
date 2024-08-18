@@ -12,7 +12,6 @@ body {
     height: 100vh;
     margin: 0;
     color: white;
-    overflow: hidden;
 }
 
 .container {
@@ -61,10 +60,6 @@ button {
 
 #generate {
     background-color: #00AB66;
-}
-
-#reset {
-    background-color: #FF033E;
 }
 
 .upload {
