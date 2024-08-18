@@ -31,13 +31,6 @@ fileInput.addEventListener('change', () => {
     }
 });
 
-resetButton.addEventListener('click', () => {
-    passwordInput.value = '';
-    messageInput.value = '';
-    fileNameDisplay.textContent = 'File Name';
-    fileSizeDisplay.textContent = 'File Size (in bytes)';
-});
-
 generateButton.addEventListener('click', () => {
     if (file) {
         build();
@@ -75,7 +68,6 @@ function generateHTML() {
      height: 100vh;
      margin: 0;
      color: white;
-     overflow: hidden;
     }
 	.container {
      background-color: black;
